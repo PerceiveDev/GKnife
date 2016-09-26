@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 public class KnifeHandler implements Listener {
@@ -40,7 +40,7 @@ public class KnifeHandler implements Listener {
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 		if(!e.isCancelled()) {
-			if(e instanceof AnvilInventory) {
+			if(e.getInventory().getType() == InventoryType.ANVIL || e.getInventory().getType() == InventoryType.CRAFTING) {
 				Player p = (Player) e.getWhoClicked();
 				
 				if(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()).equalsIgnoreCase("Golden Knife")) {
