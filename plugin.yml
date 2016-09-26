@@ -1,0 +1,9 @@
+name: gknife
+main: me.endureblackout.gknife.GKnife
+version: 1.0
+description: A custom knife plugin
+author: [EndureBlackout]
+commands:
+  gknife:
+    description: Main Command
+    usage: "/help give [player]"
