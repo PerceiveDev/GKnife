@@ -1,14 +1,14 @@
 package me.endureblackout.gknife;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class KnifeHandler implements Listener {
 	GKnife plugin;
@@ -18,20 +18,25 @@ public class KnifeHandler implements Listener {
 	}
 	
 	@EventHandler
+	public void onHitEvent(EntityDamageByEntityEvent e) {
+		if(e.getDamager() instanceof Player) {
+			Player p = (Player) e.getDamager();
+
+			if(p.getInventory().getItemInMainHand().equals(CommandHandler.gKnife) && !p.hasPermission("gknife.use")) {
+				e.setCancelled(true);
+				p.sendMessage(ChatColor.RED + "You are not allowed to use that!");
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onDeathEvent(PlayerDeathEvent e) {
 		Player p = e.getEntity();
 		
 		if(p.getKiller() instanceof Player && p.hasPermission("gknife.use")) {
 			Player killer = p.getKiller();
 			
-			if(ChatColor.stripColor(killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName()).equalsIgnoreCase("Golden Knife")) {
-				ItemStack knife = killer.getInventory().getItemInMainHand();
-				
-				if(killer.getInventory().contains(knife)) {
-					killer.getInventory().remove(knife);
-					killer.playSound(p.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-				}
-				
+			if(killer.getInventory().getItemInMainHand() == CommandHandler.gKnife) {
 				e.setDeathMessage(ChatColor.GOLD + killer.getDisplayName() + " used their Golden Knife to kill " + p.getDisplayName());
 			}
 		}
@@ -47,6 +52,19 @@ public class KnifeHandler implements Listener {
 					e.setCancelled(true);
 					p.sendMessage(ChatColor.RED + "You cannot change that item!");
 				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPreCommand(PlayerCommandPreprocessEvent e) {
+		if(e.getMessage().contains("fix") || e.getMessage().contains("repair")) {
+			if(e.getPlayer().getInventory().contains(CommandHandler.gKnife)) {
+				
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "A golden knife cannot be repaired");
+			} else if(!e.getPlayer().getInventory().contains(CommandHandler.gKnife)){
+				return;
 			}
 		}
 	}

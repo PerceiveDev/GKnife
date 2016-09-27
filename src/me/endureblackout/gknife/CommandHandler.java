@@ -16,7 +16,7 @@ public class CommandHandler implements CommandExecutor {
 	
 	GKnife plugin;
 	
-	ItemStack gKnife = new ItemStack(Material.GOLD_SWORD);
+	public static ItemStack gKnife = new ItemStack(Material.GOLD_SWORD);
 	ItemMeta knifeMeta = gKnife.getItemMeta();
 	
 	public CommandHandler(GKnife instance) {
@@ -24,6 +24,7 @@ public class CommandHandler implements CommandExecutor {
 		
 		knifeMeta.setDisplayName(ChatColor.GOLD + "Golden Knife");
 		knifeMeta.addEnchant(Enchantment.DAMAGE_ALL, 1000, true);
+		gKnife.setDurability((byte)32);
 		gKnife.setItemMeta(knifeMeta);
 	}
 
