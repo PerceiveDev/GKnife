@@ -21,7 +21,7 @@ public class KnifeHandler implements Listener {
 	public void onDeathEvent(PlayerDeathEvent e) {
 		Player p = e.getEntity();
 		
-		if(p.getKiller() instanceof Player) {
+		if(p.getKiller() instanceof Player && p.hasPermission("gknife.use")) {
 			Player killer = p.getKiller();
 			
 			if(ChatColor.stripColor(killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName()).equalsIgnoreCase("Golden Knife")) {
